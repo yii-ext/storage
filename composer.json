@@ -1,0 +1,6 @@
+{
+    "name": "yii-ext/storage",
+    "description": "File storage",
+    "homepage": "https://github.com/yii-ext/storage/",
+    "type": "yii-extension"
+}
