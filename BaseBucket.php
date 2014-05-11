@@ -6,7 +6,7 @@
  * @license http://www.zfort.com/terms-of-use
  */
 
-namespace yii_ext\fileStorage;
+namespace yii_ext\storage;
 
 use CComponent;
 use CException;
@@ -21,7 +21,7 @@ use Yii;
  *
  * @author Klimov Paul <klimov@zfort.com>
  * @version $Id$
- * @package zfort\file\storage
+ * @package yii_ext\storage
  * @since 1.0
  */
 abstract class BaseBucket extends CComponent implements BucketInterface

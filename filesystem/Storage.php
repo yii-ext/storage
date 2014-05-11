@@ -6,18 +6,18 @@
  * @license http://www.zfort.com/terms-of-use
  */
 
-namespace yii_ext\fileStorage\filesystem;
+namespace yii_ext\storage\filesystem;
 
 use CException;
-use yii_ext\fileStorage\BaseStorage;
+use yii_ext\storage\BaseStorage;
 
 /**
  * Storage introduces the file storage based simply on the OS file system.
  *
  * Configuration example:
  * <code>
- * 'fileStorage' => array(
- *     'class' => 'zfort\file\storage\filesystem\Storage',
+ * 'storage' => array(
+ *     'class' => 'yii_ext\storage\filesystem\Storage',
  *     'basePath' => '/home/www/files',
  *     'baseUrl' => 'http://www.mydomain.com/files',
  *     'filePermission' => 0777,
@@ -43,7 +43,7 @@ use yii_ext\fileStorage\BaseStorage;
  *
  * @author Klimov Paul <klimov@zfort.com>
  * @version $Id$
- * @package zfort\file\storage\filesystem
+ * @package yii_ext\storage\filesystem
  * @since 1.0
  */
 class Storage extends BaseStorage
@@ -51,7 +51,7 @@ class Storage extends BaseStorage
     /**
      * @var string name of the bucket class.
      */
-    protected $_bucketClassName = '\yii_ext\fileStorage\filesystem\Bucket';
+    protected $_bucketClassName = '\yii_ext\storage\filesystem\Bucket';
     /**
      * @var string file system path, which is basic for all buckets.
      */

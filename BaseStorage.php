@@ -6,7 +6,7 @@
  * @license http://www.zfort.com/terms-of-use
  */
 
-namespace yii_ext\fileStorage;
+namespace yii_ext\storage;
 
 use CApplicationComponent;
 use CException;
@@ -25,7 +25,7 @@ use Yii;
  *
  * @author Klimov Paul <klimov@zfort.com>
  * @version $Id$
- * @package zfort\file\storage
+ * @package yii_ext\storage
  * @since 1.0
  */
 abstract class BaseStorage extends CApplicationComponent implements StorageInterface
@@ -37,7 +37,7 @@ abstract class BaseStorage extends CApplicationComponent implements StorageInter
     /**
      * @var string name of the bucket class.
      */
-    protected $_bucketClassName = 'zfort\file\storage\BaseBucket';
+    protected $_bucketClassName = 'yii_ext\storage\BaseBucket';
 
     // Set / Get :
 

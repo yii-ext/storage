@@ -6,7 +6,7 @@
  * @license http://www.zfort.com/terms-of-use
  */
 
-namespace yii_ext\fileStorage;
+namespace yii_ext\storage;
 
 /**
  * BucketInterface is an interface for the all file storage buckets.
@@ -14,7 +14,7 @@ namespace yii_ext\fileStorage;
  *
  * @author Klimov Paul <klimov@zfort.com>
  * @version $Id$
- * @package zfort\file\storage
+ * @package yii_ext\storage
  * @since 1.0
  */
 interface BucketInterface

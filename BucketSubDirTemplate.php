@@ -6,7 +6,7 @@
  * @license http://www.zfort.com/terms-of-use
  */
 
-namespace yii_ext\fileStorage;
+namespace yii_ext\storage;
 use CException;
 use CFileHelper;
 
@@ -17,7 +17,7 @@ use CFileHelper;
  *
  * @author Klimov Paul <klimov@zfort.com>
  * @version $Id$
- * @package zfort\file\storage
+ * @package yii_ext\storage
  * @since 1.0
  */
 abstract class BucketSubDirTemplate extends BaseBucket

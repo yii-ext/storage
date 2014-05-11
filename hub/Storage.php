@@ -6,12 +6,12 @@
  * @license http://www.zfort.com/terms-of-use
  */
 
-namespace yii_ext\fileStorage\hub;
+namespace yii_ext\storage\hub;
 
 use CApplicationComponent;
 use CException;
 use Yii;
-use yii_ext\fileStorage\StorageInterface;
+use yii_ext\storage\StorageInterface;
 
 /**
  * Storage introduces the complex file storage, which combines
@@ -23,18 +23,18 @@ use yii_ext\fileStorage\StorageInterface;
  *
  * Configuration example:
  * <code>
- * 'fileStorage' => array(
- *     'class' => 'zfort\file\storage\hub\Storage',
+ * 'storage' => array(
+ *     'class' => 'yii_ext\storage\hub\Storage',
  *     'storages' => array(
  *         array(
- *             'class' => 'zfort\file\storage\filesystem\Storage',
+ *             'class' => 'yii_ext\storage\filesystem\Storage',
  *             ...
  *             'buckets' => array(
  *                 'fileSystemBucket' => array(...),
  *             ),
  *         ),
  *         array(
- *             'class' => 'zfort\file\storage\ftp\Storage',
+ *             'class' => 'yii_ext\storage\ftp\Storage',
  *             ...
  *             'buckets' => array(
  *                 'ftpBucket' => array(...),
@@ -45,15 +45,15 @@ use yii_ext\fileStorage\StorageInterface;
  * </code>
  * Usage example:
  * <code>
- * $fileSystemBucket = Yii::app()->fileStorage->getBucket('fileSystemBucket');
- * $ftpBucket = Yii::app()->fileStorage->getBucket('ftpBucket');
+ * $fileSystemBucket = Yii::app()->storage->getBucket('fileSystemBucket');
+ * $ftpBucket = Yii::app()->storage->getBucket('ftpBucket');
  * </code>
  *
  * @property StorageInterface[] $storages public alias of {@link _storages}.
  *
  * @author Klimov Paul <klimov@zfort.com>
  * @version $Id$
- * @package zfort\file\storage\hub
+ * @package yii_ext\storage\hub
  * @since 1.0
  */
 class Storage extends CApplicationComponent implements StorageInterface

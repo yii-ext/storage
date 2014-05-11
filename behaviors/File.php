@@ -6,7 +6,7 @@
  * @license http://www.zfort.com/terms-of-use
  */
 
-namespace yii_ext\fileBehaviors;
+namespace yii_ext\storage\behaviors;
 
 use CActiveRecord;
 use CBehavior;
@@ -15,8 +15,8 @@ use CException;
 use CFileHelper;
 use CUploadedFile;
 use Yii;
-use yii_ext\fileStorage\BucketInterface;
-use yii_ext\fileStorage\StorageInterface;
+use yii_ext\storage\BucketInterface;
+use yii_ext\storage\StorageInterface;
 
 /**
  * Behavior for the {@link CActiveRecord}, which allows to save a single file per each table record.
@@ -28,15 +28,15 @@ use yii_ext\fileStorage\StorageInterface;
  *
  * Note: you can always use {@link saveFile()} method to attach any file (not just uploaded one) to the model.
  *
- * Attention: this extension requires the extension "zfort\file\storage" to be attached to the application!
+ * Attention: this extension requires the extension "yii_ext\storage" to be attached to the application!
  * Files will be saved using file storage component.
  *
  * @see IQsFileStorage
  * @see IQsFileStorageBucket
  *
  * @property string $filePropertyName public alias of {@link _filePropertyName}.
- * @property string $fileStorageComponentName public alias of {@link _fileStorageComponentName}.
- * @property string $fileStorageBucketName public alias of {@link _fileStorageBucketName}.
+ * @property string $storageComponentName public alias of {@link _storageComponentName}.
+ * @property string $storageBucketName public alias of {@link _storageBucketName}.
  * @property string $subDirTemplate public alias of {@link _subDirTemplate}.
  * @property string $fileExtensionAttributeName public alias of {@link _fileExtensionAttributeName}.
  * @property string $fileVersionAttributeName public alias of {@link _fileVersionAttributeName}.
@@ -61,12 +61,12 @@ class File extends CBehavior
     /**
      * @var string name of the file storage application component.
      */
-    protected $_fileStorageComponentName = 'fileStorage';
+    protected $_storageComponentName = 'storage';
     /**
      * @var string name of the file storage bucket, which stores the related files.
      * If empty it will be generated automatically using owner class name and {@link filePropertyName}.
      */
-    protected $_fileStorageBucketName = '';
+    protected $_storageBucketName = '';
     /**
      * @var string template of all sub directories, which will store a particular
      * model instance's files. Value of this parameter will be parsed per each model instance.
@@ -132,35 +132,35 @@ class File extends CBehavior
         return $this->_filePropertyName;
     }
 
-    public function setFileStorageComponentName($fileStorageComponentName)
+    public function setFileStorageComponentName($storageComponentName)
     {
-        if (!is_string($fileStorageComponentName)) {
-            throw new CException('"' . get_class($this) . '::fileStorageComponentName" should be a string!');
+        if (!is_string($storageComponentName)) {
+            throw new CException('"' . get_class($this) . '::storageComponentName" should be a string!');
         }
-        $this->_fileStorageComponentName = $fileStorageComponentName;
+        $this->_storageComponentName = $storageComponentName;
         return true;
     }
 
     public function getFileStorageComponentName()
     {
-        return $this->_fileStorageComponentName;
+        return $this->_storageComponentName;
     }
 
-    public function setFileStorageBucketName($fileStorageBucketName)
+    public function setFileStorageBucketName($storageBucketName)
     {
-        if (!is_string($fileStorageBucketName)) {
-            throw new CException('"' . get_class($this) . '::fileStorageBucketName" should be a string!');
+        if (!is_string($storageBucketName)) {
+            throw new CException('"' . get_class($this) . '::storageBucketName" should be a string!');
         }
-        $this->_fileStorageBucketName = $fileStorageBucketName;
+        $this->_storageBucketName = $storageBucketName;
         return true;
     }
 
     public function getFileStorageBucketName()
     {
-        if (empty($this->_fileStorageBucketName)) {
+        if (empty($this->_storageBucketName)) {
             $this->initFileStorageBucketName();
         }
-        return $this->_fileStorageBucketName;
+        return $this->_storageBucketName;
     }
 
     public function setSubDirTemplate($subDirTemplate)
@@ -248,34 +248,34 @@ class File extends CBehavior
     }
 
     /**
-     * Returns the file storage bucket for the files by name given with {@link fileStorageBucketName}.
+     * Returns the file storage bucket for the files by name given with {@link storageBucketName}.
      * If no bucket exists attempts to create it.
      * @throws CException if unable to find file storage component
      * @return BucketInterface file storage bucket instance.
      */
     public function getFileStorageBucket()
     {
-        /* @var StorageInterface $fileStorage */
-        $fileStorage = Yii::app()->getComponent($this->getFileStorageComponentName());
-        if (!is_object($fileStorage)) {
+        /* @var StorageInterface $storage */
+        $storage = Yii::app()->getComponent($this->getFileStorageComponentName());
+        if (!is_object($storage)) {
             throw new CException('Unable to find file storage application component "' . $this->getFileStorageComponentName() . '"');
         }
         $bucketName = $this->getFileStorageBucketName();
-        if (!$fileStorage->hasBucket($bucketName)) {
-            $fileStorage->addBucket($bucketName, array());
+        if (!$storage->hasBucket($bucketName)) {
+            $storage->addBucket($bucketName, array());
         }
-        return $fileStorage->getBucket($bucketName);
+        return $storage->getBucket($bucketName);
     }
 
     /**
-     * Initializes {@link fileStorageBucketName} using
+     * Initializes {@link storageBucketName} using
      * owner class name and {@link filePropertyName}.
      * @return boolean success.
      */
     protected function initFileStorageBucketName()
     {
-        $fileStorageBucketName = str_replace('\\', '_', get_class($this->getOwner())) . ucfirst($this->getFilePropertyName());
-        $this->_fileStorageBucketName = $fileStorageBucketName;
+        $storageBucketName = str_replace('\\', '_', get_class($this->getOwner())) . ucfirst($this->getFilePropertyName());
+        $this->_storageBucketName = $storageBucketName;
         return true;
     }
 
@@ -534,8 +534,8 @@ class File extends CBehavior
     protected function newFile($sourceFileName, $fileVersion, $fileExtension)
     {
         $fileFullName = $this->getFileFullName($fileVersion, $fileExtension);
-        $fileStorageBucket = $this->getFileStorageBucket();
-        return $fileStorageBucket->copyFileIn($sourceFileName, $fileFullName);
+        $storageBucket = $this->getFileStorageBucket();
+        return $storageBucket->copyFileIn($sourceFileName, $fileFullName);
     }
 
     /**
@@ -553,10 +553,10 @@ class File extends CBehavior
      */
     protected function unlinkFile()
     {
-        $fileStorageBucket = $this->getFileStorageBucket();
+        $storageBucket = $this->getFileStorageBucket();
         $fileName = $this->getFileFullName();
-        if ($fileStorageBucket->fileExists($fileName)) {
-            return $fileStorageBucket->deleteFile($fileName);
+        if ($storageBucket->fileExists($fileName)) {
+            return $storageBucket->deleteFile($fileName);
         }
         return true;
     }
@@ -622,8 +622,8 @@ class File extends CBehavior
      */
     public function fileExists()
     {
-        $fileStorageBucket = $this->getFileStorageBucket();
-        return $fileStorageBucket->fileExists($this->getFileFullName());
+        $storageBucket = $this->getFileStorageBucket();
+        return $storageBucket->fileExists($this->getFileFullName());
     }
 
     /**
@@ -632,8 +632,8 @@ class File extends CBehavior
      */
     public function getFileContent()
     {
-        $fileStorageBucket = $this->getFileStorageBucket();
-        return $fileStorageBucket->getFileContent($this->getFileFullName());
+        $storageBucket = $this->getFileStorageBucket();
+        return $storageBucket->getFileContent($this->getFileFullName());
     }
 
     /**
@@ -642,15 +642,15 @@ class File extends CBehavior
      */
     public function getFileUrl()
     {
-        $fileStorageBucket = $this->getFileStorageBucket();
+        $storageBucket = $this->getFileStorageBucket();
         $fileFullName = $this->getFileFullName();
         $defaultFileUrl = $this->getDefaultFileUrl();
         if (!empty($defaultFileUrl)) {
-            if (!$fileStorageBucket->fileExists($fileFullName)) {
+            if (!$storageBucket->fileExists($fileFullName)) {
                 return $defaultFileUrl;
             }
         }
-        return $fileStorageBucket->getFileUrl($fileFullName);
+        return $storageBucket->getFileUrl($fileFullName);
     }
 
     // Events:
